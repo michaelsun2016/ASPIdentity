@@ -17,5 +17,12 @@ namespace ASPIdentiy
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        public void Session_OnEnd()
+        {
+
+            Server.Transfer(this.Session["BackURL"].ToString());
+            //Response.Redirect(HttpContext.Current.Session["BackURL"].ToString());
+        }
     }
 }

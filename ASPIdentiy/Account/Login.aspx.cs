@@ -21,6 +21,12 @@ namespace ASPIdentiy.Account
             {
                 RegisterHyperLink.NavigateUrl += "?ReturnUrl=" + returnUrl;
             }
+
+            var backUrl = HttpUtility.UrlEncode(Request.QueryString["surl"]);
+            if (!String.IsNullOrEmpty(backUrl))
+            {
+                HttpContext.Current.Session["BackURL"] = backUrl;
+            }
         }
 
         protected void LogIn(object sender, EventArgs e)

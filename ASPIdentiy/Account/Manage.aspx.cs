@@ -12,7 +12,7 @@ using ASPIdentiy.Models;
 
 namespace ASPIdentiy.Account
 {
-    public partial class Manage : System.Web.UI.Page
+    public partial class Manage : AspIdentityBasePage
     {
         protected string SuccessMessage
         {
