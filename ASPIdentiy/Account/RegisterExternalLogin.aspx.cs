@@ -6,6 +6,8 @@ using Microsoft.Owin.Security;
 using Owin;
 using ASPIdentiy.Models;
 
+using EFDBLibrary;
+
 namespace ASPIdentiy.Account
 {
     public partial class RegisterExternalLogin : System.Web.UI.Page
@@ -49,6 +51,8 @@ namespace ASPIdentiy.Account
                 var user = manager.Find(loginInfo.Login);
                 if (user != null)
                 {
+                    SaveSourceURL(user.Id);
+                    
                     signInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
                     IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);
                 }
@@ -65,6 +69,8 @@ namespace ASPIdentiy.Account
                     var result = manager.AddLogin(User.Identity.GetUserId(), verifiedloginInfo.Login);
                     if (result.Succeeded)
                     {
+                        SaveSourceURL(User.Identity.GetUserId());
+
                         IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);
                     }
                     else
@@ -106,6 +112,8 @@ namespace ASPIdentiy.Account
                 result = manager.AddLogin(user.Id, loginInfo.Login);
                 if (result.Succeeded)
                 {
+                    SaveSourceURL(user.Id);
+
                     signInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -124,6 +132,16 @@ namespace ASPIdentiy.Account
             foreach (var error in result.Errors) 
             {
                 ModelState.AddModelError("", error);
+            }
+        }
+
+        private void SaveSourceURL(string userId)
+        {
+            var sUrl = Request.QueryString["surl"];
+            if (String.IsNullOrEmpty(sUrl) == false)
+            {
+                EFDBLibrary.EntityProfile ep = new EFDBLibrary.EntityProfile();
+                ep.SaveEntityFromURL(Guid.Parse(userId), sUrl);
             }
         }
     }

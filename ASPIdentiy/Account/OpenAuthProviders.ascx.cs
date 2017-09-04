@@ -14,13 +14,22 @@ namespace ASPIdentiy.Account
         {
             if (IsPostBack)
             {
+                var backUrl = HttpUtility.UrlEncode(Request.QueryString["surl"]);
                 var provider = Request.Form["provider"];
                 if (provider == null)
                 {
                     return;
                 }
+                string redirectUrl;
                 // Request a redirect to the external login provider
-                string redirectUrl = ResolveUrl(String.Format(CultureInfo.InvariantCulture, "~/Account/RegisterExternalLogin?{0}={1}&returnUrl={2}", IdentityHelper.ProviderNameKey, provider, ReturnUrl));
+                if (string.IsNullOrEmpty(backUrl) == true)
+                {
+                    redirectUrl = ResolveUrl(String.Format(CultureInfo.InvariantCulture, "~/Account/RegisterExternalLogin?{0}={1}&returnUrl={2}", IdentityHelper.ProviderNameKey, provider, ReturnUrl));
+                }
+                else
+                {
+                    redirectUrl = ResolveUrl(String.Format(CultureInfo.InvariantCulture, "~/Account/RegisterExternalLogin?{0}={1}&returnUrl={2}&surl={3}", IdentityHelper.ProviderNameKey, provider, ReturnUrl, backUrl));
+                }
                 var properties = new AuthenticationProperties() { RedirectUri = redirectUrl };
                 // Add xsrf verification when linking accounts
                 if (Context.User.Identity.IsAuthenticated)

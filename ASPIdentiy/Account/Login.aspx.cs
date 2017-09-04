@@ -6,6 +6,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Owin;
 using ASPIdentiy.Models;
 
+using EFDBLibrary;
+
 namespace ASPIdentiy.Account
 {
     public partial class Login : Page
@@ -22,17 +24,14 @@ namespace ASPIdentiy.Account
                 RegisterHyperLink.NavigateUrl += "?ReturnUrl=" + returnUrl;
             }
 
-            var backUrl = HttpUtility.UrlEncode(Request.QueryString["surl"]);
-            if (!String.IsNullOrEmpty(backUrl))
-            {
-                HttpContext.Current.Session["BackURL"] = backUrl;
-            }
         }
 
         protected void LogIn(object sender, EventArgs e)
         {
             if (IsValid)
             {
+                var backUrl = HttpUtility.UrlEncode(Request.QueryString["surl"]);
+                
                 // Validate the user password
                 var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
                 var signinManager = Context.GetOwinContext().GetUserManager<ApplicationSignInManager>();
@@ -44,6 +43,13 @@ namespace ASPIdentiy.Account
                 switch (result)
                 {
                     case SignInStatus.Success:
+                        // In case this login is from third party url, we need save the original url and move back once service or task finish.
+                        if (!String.IsNullOrEmpty(backUrl))
+                        {
+                            ApplicationUser u = signinManager.UserManager.Find(Email.Text, Password.Text);
+                            EFDBLibrary.EntityProfile ep = new EFDBLibrary.EntityProfile();
+                            ep.SaveEntityFromURL(Guid.Parse(u.Id), backUrl);
+                        }
                         IdentityHelper.RedirectToReturnUrl(Request.QueryString["ReturnUrl"], Response);
                         break;
                     case SignInStatus.LockedOut:

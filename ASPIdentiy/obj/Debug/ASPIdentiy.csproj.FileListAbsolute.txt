@@ -50,3 +50,5 @@ C:\Work\Components\IdentiyUsers\ASPNET\ASPIdentiy\ASPIdentiy\bin\Microsoft.Owin.
 C:\Work\Components\IdentiyUsers\ASPNET\ASPIdentiy\ASPIdentiy\obj\Debug\ASPIdentiy.csprojResolveAssemblyReference.cache
 C:\Work\Components\IdentiyUsers\ASPNET\ASPIdentiy\ASPIdentiy\obj\Debug\ASPIdentiy.dll
 C:\Work\Components\IdentiyUsers\ASPNET\ASPIdentiy\ASPIdentiy\obj\Debug\ASPIdentiy.pdb
+C:\Work\Components\IdentiyUsers\ASPNET\ASPIdentiy\ASPIdentiy\bin\EFDBLibrary.dll
+C:\Work\Components\IdentiyUsers\ASPNET\ASPIdentiy\ASPIdentiy\bin\EFDBLibrary.pdb
